@@ -27,6 +27,11 @@ variable "requester_name" {
   type        = string
 }
 
+variable "github_repo_owner" {
+  description = "GitHub repo owner"
+  type        = string
+}
+
 variable "create_cluster" {
   description = "flag to create new cluster or use existing one"
   type        = bool
