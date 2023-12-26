@@ -1,4 +1,4 @@
-aws_region      = "eu-east-1"
+aws_region      = "us-east-1"
 requester_name  = "Wenqi Glantz"
 
 create_cluster              = true
