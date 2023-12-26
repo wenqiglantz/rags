@@ -1,19 +1,19 @@
 variable "deploy_repo" {
   description = "CI injected variable, application's repo name"
-  type    = string
-  default = "sharedactions"
+  type        = string
+  default     = "sharedactions"
 }
 
 variable "deploy_env" {
   description = "CI injected variable, deployment environment"
-  type    = string
-  default = "dev"
+  type        = string
+  default     = "dev"
 }
 
 variable "pipeline_token" {
   description = "CI injected variable, pipeline token"
-  type    = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "aws_region" {
@@ -30,6 +30,7 @@ variable "requester_name" {
 variable "github_repo_owner" {
   description = "GitHub repo owner"
   type        = string
+  default     = ""
 }
 
 variable "create_cluster" {
