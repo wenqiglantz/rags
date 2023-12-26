@@ -1,0 +1,41 @@
+name: CI/CD workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run the workflow against'
+        type: environment
+        required: true
+#   push:
+#   pull_request:
+#     types: [ opened, synchronize, reopened, closed ]
+
+permissions:
+  contents: read
+
+jobs:
+
+  build-and-test:
+    name: Build and test
+    permissions:
+      id-token: write # need this for OIDC
+      contents: read
+    uses: wenqiglantz/reusable-workflows-modules/.github/workflows/python-build-image.yml@main
+    with:
+      env: ${{ inputs.environment || 'poc' }}
+    secrets: inherit
+
+  deploy-to-dev:
+    name: Deploy to Dev
+    needs: [build-and-test]
+    permissions:
+      id-token: write # need this for OIDC
+      contents: read
+      packages: read
+    uses: wenqiglantz/reusable-workflows-modules/.github/workflows/deploy-to-ecs.yml@main
+    with:
+      env: ${{ inputs.environment || 'poc' }}
+      image-tag: ${{ needs.build-and-test.outputs.image-tag }}
+    secrets: inherit
+    
