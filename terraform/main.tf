@@ -12,39 +12,25 @@ provider "aws" {
   region = var.aws_region
 }
 
-#######################################
-# VPC/subnets/certificate retrieved from parameter store
-#######################################
-data "aws_ssm_parameter" "vpc_id" {
-  name = "/base/vpcId"
-}
-
-data "aws_ssm_parameter" "private_subnet_a_id" {
-  name = "/base/privateSubnetA"
-}
-
-data "aws_ssm_parameter" "private_subnet_b_id" {
-  name = "/base/privateSubnetB"
-}
-
-data "aws_ssm_parameter" "private_subnet_c_id" {
-  name = "/base/privateSubnetC"
-}
-
-data "aws_ssm_parameter" "public_subnet_a_id" {
-  name = "/base/publicSubnetA"
-}
-
-data "aws_ssm_parameter" "public_subnet_b_id" {
-  name = "/base/publicSubnetB"
-}
-
-data "aws_ssm_parameter" "public_subnet_c_id" {
-  name = "/base/publicSubnetC"
-}
-
 data "aws_ssm_parameter" "cert" {
   name = "/base/certificateArn"
+}
+
+locals {
+  availability_zones = ["${var.aws_region}a", "${var.aws_region}b", "${var.aws_region}c"]
+}
+
+module "networking" {
+  source = "github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/networking?ref=main"
+
+  deploy_env     = var.deploy_env
+  requester_name = var.requester_name
+
+  create_vpc           = var.create_vpc
+  vpc_cidr             = var.vpc_cidr
+  availability_zones   = local.availability_zones
+  public_subnets_cidr  = var.public_subnets_cidr
+  private_subnets_cidr = var.private_subnets_cidr
 }
 
 module "cluster_alb" {
@@ -53,14 +39,8 @@ module "cluster_alb" {
   deploy_env     = var.deploy_env
   requester_name = var.requester_name
 
-  create_cluster = var.create_cluster
-  cluster_name   = var.cluster_name
-  vpc_id         = data.aws_ssm_parameter.vpc_id.value
-  public_subnets = [
-    data.aws_ssm_parameter.public_subnet_a_id.value,
-    data.aws_ssm_parameter.public_subnet_b_id.value,
-    data.aws_ssm_parameter.public_subnet_c_id.value
-  ]
+  create_cluster            = var.create_cluster
+  cluster_name              = var.cluster_name
   alb_name                  = "${var.service_prefix}-alb"
   target_group_name         = "${var.service_prefix}-tgt-group"
   service_port_target_group = var.service_port_target_group
@@ -79,13 +59,7 @@ module "fargate" {
   deploy_env     = var.deploy_env
   requester_name = var.requester_name
 
-  cluster_name = var.cluster_name
-  vpc_id       = data.aws_ssm_parameter.vpc_id.value
-  private_subnets = [
-    data.aws_ssm_parameter.private_subnet_a_id.value,
-    data.aws_ssm_parameter.private_subnet_b_id.value,
-    data.aws_ssm_parameter.private_subnet_c_id.value
-  ]
+  cluster_name                = var.cluster_name
   alb_security_group_id       = module.cluster_alb.alb_security_group_id
   alb_target_group_arn        = module.cluster_alb.ecs_alb_target_group_arn
   cpu                         = var.cpu
