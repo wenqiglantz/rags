@@ -31,7 +31,6 @@ module "networking" {
 
 module "cluster_alb" {
   source     = "github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/ecs/cluster_alb?ref=main"
-  depends_on = [module.networking]
 
   deploy_env     = var.deploy_env
   requester_name = var.requester_name
@@ -52,7 +51,6 @@ module "cluster_alb" {
 
 module "fargate" {
   source     = "github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/ecs/service_taskdef?ref=main"
-  depends_on = [module.networking]
 
   deploy_env     = var.deploy_env
   requester_name = var.requester_name
