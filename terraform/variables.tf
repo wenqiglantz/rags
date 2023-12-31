@@ -55,14 +55,26 @@ variable "service_prefix" {
   description = "service prefix to be used in naming resources such as ALB, target group, security group, etc."
 }
 
-variable "cpu" {
-  description = "The CPU size"
+variable "container_cpu" {
+  description = "The container CPU size"
   type        = string
   default     = "512"
 }
 
-variable "memory" {
-  description = "The memory size"
+variable "container_memory" {
+  description = "The container memory size"
+  type        = string
+  default     = "1024"
+}
+
+variable "task_cpu" {
+  description = "The task CPU size"
+  type        = string
+  default     = "512"
+}
+
+variable "task_memory" {
+  description = "The task memory size"
   type        = string
   default     = "1024"
 }

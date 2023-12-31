@@ -60,6 +60,26 @@ module "vpc" {
   single_nat_gateway = true
 }
 
+module "log_bucket" {
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "~> 3.0"
+
+  bucket_prefix = "${local.name}-logs-"
+  acl           = "log-delivery-write"
+
+  # For example only
+  force_destroy = true
+
+  control_object_ownership = true
+  object_ownership         = "ObjectWriter"
+
+  attach_elb_log_delivery_policy = true # Required for ALB logs
+  attach_lb_log_delivery_policy  = true # Required for ALB/NLB logs
+
+  attach_deny_insecure_transport_policy = true
+  attach_require_latest_tls_policy      = true
+}
+
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "9.4.0"
@@ -93,7 +113,8 @@ module "alb" {
   }
 
   access_logs = {
-    bucket = "${var.service_prefix}-alb-logs"
+    bucket = module.log_bucket.s3_bucket_id
+    prefix = "access-logs"
   }
 
   listeners = {
@@ -178,8 +199,8 @@ module "ecs" {
 
   services = {
     rags = {
-      cpu    = var.cpu
-      memory = var.memory
+      cpu    = var.task_cpu
+      memory = var.task_memory
 
       # Container definition(s)
       container_definitions = {
@@ -196,8 +217,8 @@ module "ecs" {
         }
 
         rags = {
-          cpu       = var.cpu
-          memory    = var.memory
+          cpu       = var.container_cpu
+          memory    = var.container_memory
           essential = true
           image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/${var.ecr_repository_name}:latest"
           port_mappings = [
