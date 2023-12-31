@@ -135,6 +135,10 @@ module "alb" {
         protocol            = "HTTP"
         matcher             = "200-399"
       }
+
+      # Theres nothing to attach here in this definition. Instead,
+      # ECS will attach the IPs of the tasks to this target group
+      create_attachment = false
     }
   }
 
@@ -240,7 +244,7 @@ module "ecs" {
 
       load_balancer = {
         service = {
-          target_group_arn = module.alb.target_groups["arn"]
+          target_group_arn = module.alb.target_groups[0].arn
           container_name   = var.service_name
           container_port   = var.service_port
         }
