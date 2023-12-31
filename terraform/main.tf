@@ -16,9 +16,6 @@ data "aws_ssm_parameter" "cert" {
   name = "/base/certificateArn"
 }
 
-locals {
-  availability_zones = ["${var.aws_region}a", "${var.aws_region}b", "${var.aws_region}c"]
-}
 
 module "networking" {
   source = "github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/networking?ref=main"
@@ -28,14 +25,13 @@ module "networking" {
 
   create_vpc           = var.create_vpc
   vpc_cidr             = var.vpc_cidr
-  availability_zones   = local.availability_zones
   public_subnets_cidr  = var.public_subnets_cidr
   private_subnets_cidr = var.private_subnets_cidr
 }
 
 module "cluster_alb" {
-  source = "github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/ecs/cluster_alb?ref=main"
-  depends_on = [ module.networking ]
+  source     = "github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/ecs/cluster_alb?ref=main"
+  depends_on = [module.networking]
 
   deploy_env     = var.deploy_env
   requester_name = var.requester_name
@@ -55,9 +51,9 @@ module "cluster_alb" {
 }
 
 module "fargate" {
-  source = "github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/ecs/service_taskdef?ref=main"
-  depends_on = [ module.cluster_alb ]
-  
+  source     = "github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/ecs/service_taskdef?ref=main"
+  depends_on = [module.networking]
+
   deploy_env     = var.deploy_env
   requester_name = var.requester_name
 
