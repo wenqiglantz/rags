@@ -281,28 +281,28 @@ resource "github_actions_environment_variable" "ecs_cluster" {
   repository    = var.deploy_repo
   environment   = var.deploy_env
   variable_name = "ECS_CLUSTER"
-  value         = aws_ecs_cluster.ecs_fargate[0].name
+  value         = module.ecs.cluster_name
 }
 
 resource "github_actions_environment_variable" "ecs_task_definition" {
   repository    = var.deploy_repo
   environment   = var.deploy_env
   variable_name = "ECS_TASK_DEFINITION"
-  value         = aws_ecs_task_definition.app.family
+  value         = var.service_name
 }
 
 resource "github_actions_environment_variable" "container_name" {
   repository    = var.deploy_repo
   environment   = var.deploy_env
   variable_name = "CONTAINER_NAME"
-  value         = aws_ecs_task_definition.app.family
+  value         = var.service_name
 }
 
 resource "github_actions_environment_variable" "ecs_service" {
   repository    = var.deploy_repo
   environment   = var.deploy_env
   variable_name = "ECS_SERVICE"
-  value         = aws_ecs_service.app.name
+  value         = var.service_name
 }
 
 resource "github_actions_environment_variable" "ecr_repository_name" {
