@@ -16,21 +16,14 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cluster_alb"></a> [cluster\_alb](#module\_cluster\_alb) | github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/ecs/cluster_alb | latest |
-| <a name="module_fargate"></a> [fargate](#module\_fargate) | github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/ecs/service_taskdef | latest |
+| <a name="module_cluster_alb"></a> [cluster\_alb](#module\_cluster\_alb) | github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/ecs/cluster_alb | main |
+| <a name="module_fargate"></a> [fargate](#module\_fargate) | github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/ecs/service_taskdef | main |
 
 ## Resources
 
 | Name | Type |
 |------|------|
 | [aws_ssm_parameter.cert](https://registry.terraform.io/providers/hashicorp/aws/5.31.0/docs/data-sources/ssm_parameter) | data source |
-| [aws_ssm_parameter.private_subnet_a_id](https://registry.terraform.io/providers/hashicorp/aws/5.31.0/docs/data-sources/ssm_parameter) | data source |
-| [aws_ssm_parameter.private_subnet_b_id](https://registry.terraform.io/providers/hashicorp/aws/5.31.0/docs/data-sources/ssm_parameter) | data source |
-| [aws_ssm_parameter.private_subnet_c_id](https://registry.terraform.io/providers/hashicorp/aws/5.31.0/docs/data-sources/ssm_parameter) | data source |
-| [aws_ssm_parameter.public_subnet_a_id](https://registry.terraform.io/providers/hashicorp/aws/5.31.0/docs/data-sources/ssm_parameter) | data source |
-| [aws_ssm_parameter.public_subnet_b_id](https://registry.terraform.io/providers/hashicorp/aws/5.31.0/docs/data-sources/ssm_parameter) | data source |
-| [aws_ssm_parameter.public_subnet_c_id](https://registry.terraform.io/providers/hashicorp/aws/5.31.0/docs/data-sources/ssm_parameter) | data source |
-| [aws_ssm_parameter.vpc_id](https://registry.terraform.io/providers/hashicorp/aws/5.31.0/docs/data-sources/ssm_parameter) | data source |
 
 ## Inputs
 
@@ -44,6 +37,7 @@
 | <a name="input_deploy_env"></a> [deploy\_env](#input\_deploy\_env) | CI injected variable, deployment environment | `string` | `"dev"` | no |
 | <a name="input_deploy_repo"></a> [deploy\_repo](#input\_deploy\_repo) | CI injected variable, application's repo name | `string` | `"sharedactions"` | no |
 | <a name="input_ecr_repository_name"></a> [ecr\_repository\_name](#input\_ecr\_repository\_name) | The ECR repository name | `string` | `"default"` | no |
+| <a name="input_github_repo_owner"></a> [github\_repo\_owner](#input\_github\_repo\_owner) | GitHub repo owner | `string` | `""` | no |
 | <a name="input_healthcheck_path"></a> [healthcheck\_path](#input\_healthcheck\_path) | application's health check path | `string` | `""` | no |
 | <a name="input_log_group_retention_in_days"></a> [log\_group\_retention\_in\_days](#input\_log\_group\_retention\_in\_days) | Specifies the number of days you want to retain log events in the specified log group. Possible values are: 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, etc. | `number` | `7` | no |
 | <a name="input_memory"></a> [memory](#input\_memory) | The memory size | `string` | `"1024"` | no |

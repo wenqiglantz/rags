@@ -17,18 +17,6 @@ data "aws_ssm_parameter" "cert" {
 }
 
 
-module "networking" {
-  source = "github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/networking?ref=main"
-
-  deploy_env     = var.deploy_env
-  requester_name = var.requester_name
-
-  create_vpc           = var.create_vpc
-  vpc_cidr             = var.vpc_cidr
-  public_subnets_cidr  = var.public_subnets_cidr
-  private_subnets_cidr = var.private_subnets_cidr
-}
-
 module "cluster_alb" {
   source     = "github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/ecs/cluster_alb?ref=main"
 
