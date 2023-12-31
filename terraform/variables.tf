@@ -22,6 +22,11 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "vpc_cidr" {
+  description = "The CIDR block of the vpc"
+  type        = string
+}
+
 variable "requester_name" {
   description = "requestor name tag"
   type        = string
@@ -33,11 +38,11 @@ variable "github_repo_owner" {
   default     = ""
 }
 
-variable "create_cluster" {
+/* variable "create_cluster" {
   description = "flag to create new cluster or use existing one"
   type        = bool
   default     = true
-}
+} */
 
 variable "cluster_name" {
   description = "Name of the cluster (up to 255 letters, numbers, hyphens, and underscores)"
@@ -73,17 +78,17 @@ variable "ecr_repository_name" {
   description = "The ECR repository name"
 }
 
-variable "service_port_target_group" {
+variable "service_port" {
   description = "application's service port"
   type        = number
-  default     = 8080
+  default     = 8501
 }
 
-variable "context_path" {
+/* variable "context_path" {
   description = "application's path, used for ALB listener rule configuration"
   type        = string
   default     = ""
-}
+} */
 
 variable "healthcheck_path" {
   description = "application's health check path"
@@ -91,7 +96,7 @@ variable "healthcheck_path" {
   default     = ""
 }
 
-variable "log_group_retention_in_days" {
+/* variable "log_group_retention_in_days" {
   description = "Specifies the number of days you want to retain log events in the specified log group. Possible values are: 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, etc."
   type        = number
   default     = 7
@@ -105,9 +110,11 @@ variable "alb_request_count_per_target" {
 variable "ecs_autoscaling_target_max_capacity" {
   description = "ecs autoscaling target max_capacity"
   type        = number
+  default     = 5
 }
 
 variable "ecs_autoscaling_target_min_capacity" {
   description = "ecs autoscaling target min_capacity"
   type        = number
-}
+  default     = 1
+} */
