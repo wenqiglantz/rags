@@ -244,7 +244,7 @@ module "ecs" {
 
       load_balancer = {
         service = {
-          target_group_arn = module.alb.target_groups[0].arn
+          target_group_arn = module.alb.target_groups["ex-instance"].arn
           container_name   = var.service_name
           container_port   = var.service_port
         }
