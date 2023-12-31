@@ -96,3 +96,18 @@ variable "log_group_retention_in_days" {
   type        = number
   default     = 7
 }
+
+variable "alb_request_count_per_target" {
+  description = "ALB request count per target, used for target_tracking_scaling_policy_configuration"
+  type        = string
+}
+
+variable "ecs_autoscaling_target_max_capacity" {
+  description = "ecs autoscaling target max_capacity"
+  type        = number
+}
+
+variable "ecs_autoscaling_target_min_capacity" {
+  description = "ecs autoscaling target min_capacity"
+  type        = number
+}
