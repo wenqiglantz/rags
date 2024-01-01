@@ -311,6 +311,34 @@ module "ecs" {
   }
 }
 
+module "ecr" {
+  source = "terraform-aws-modules/ecr/aws"
+
+  repository_name = "rags"
+
+  repository_read_write_access_arns = [
+    module.ecs.services["rags"].task_exec_iam_role_arn, 
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/github-actions-role"
+  ]
+  repository_lifecycle_policy = jsonencode({
+    rules = [
+      {
+        rulePriority = 1,
+        description  = "Keep last 3 images",
+        selection = {
+          tagStatus     = "tagged",
+          tagPrefixList = ["v"],
+          countType     = "imageCountMoreThan",
+          countNumber   = 3
+        },
+        action = {
+          type = "expire"
+        }
+      }
+    ]
+  })
+}
+
 #######################################
 # GitHub env variable creation, need these variables for app CI/CD in github actions
 #######################################
