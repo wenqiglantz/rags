@@ -342,7 +342,7 @@ module "ecr" {
 
 }
 
-data "aws_iam_policy_document" "registry" {
+/* data "aws_iam_policy_document" "registry" {
   statement {
     principals {
       type        = "AWS"
@@ -360,7 +360,7 @@ data "aws_iam_policy_document" "registry" {
       module.ecr.repository_arn,
     ]
   }
-}
+} */
 
 #######################################
 # GitHub env variable creation, need these variables for app CI/CD in github actions

@@ -11,4 +11,4 @@ service_prefix      = "rags"
 service_name        = "rags"
 service_port        = 8501
 healthcheck_path    = "/healthz"
-ecr_repository_name = "rag"
+ecr_repository_name = "rags"
