@@ -221,7 +221,7 @@ module "ecs" {
           cpu       = 512
           memory    = 1024
           essential = true
-          image     = "amazon/aws-for-fluent-bit:latest"
+          image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/${var.ecr_repository_name}:aws-for-fluent-bit"
           firelens_configuration = {
             type = "fluentbit"
           }
