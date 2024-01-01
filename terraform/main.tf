@@ -267,7 +267,7 @@ module "ecs" {
         namespace = aws_service_discovery_http_namespace.this.arn
         service = {
           client_alias = {
-            port     = 80
+            port     = var.service_port
             dns_name = var.service_name
           }
           port_name      = var.service_name
@@ -279,7 +279,7 @@ module "ecs" {
         service = {
           target_group_arn = module.alb.target_groups["ex-instance"].arn
           container_name   = var.service_name
-          container_port   = 80
+          container_port   = var.service_port
         }
       }
 
