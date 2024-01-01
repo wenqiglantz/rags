@@ -252,7 +252,6 @@ module "ecs" {
       }
 
       service_connect_configuration = {
-        namespace = "example"
         service = {
           client_alias = {
             port     = var.service_port
