@@ -119,7 +119,7 @@ module "alb" {
 
   listeners = {
     ex-http-https-redirect = {
-      port     = var.service_port
+      port     = "80"
       protocol = "HTTP"
       redirect = {
         port        = "443"
@@ -252,7 +252,7 @@ module "ecs" {
       }
 
       service_connect_configuration = {
-        namespace = "rags"
+        namespace = "example"
         service = {
           client_alias = {
             port     = var.service_port
