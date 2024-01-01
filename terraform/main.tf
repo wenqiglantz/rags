@@ -30,12 +30,18 @@ provider "github" {
   owner = var.github_repo_owner
 }
 
+################################################################################
+# Supporting Resources
+################################################################################
 data "aws_ssm_parameter" "cert" {
   name = "/base/certificateArn"
 }
 
+data "aws_ssm_parameter" "fluentbit" {
+  name = "/aws/service/aws-for-fluent-bit/stable"
+}
+
 data "aws_caller_identity" "current" {}
-//data "aws_region" "current" {}
 data "aws_availability_zones" "available" {}
 
 locals {
@@ -43,6 +49,11 @@ locals {
 
   vpc_cidr = var.vpc_cidr
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
+}
+
+resource "aws_service_discovery_http_namespace" "this" {
+  name        = local.name
+  description = "CloudMap namespace for ${local.name}"
 }
 
 module "vpc" {
@@ -167,19 +178,6 @@ module "alb" {
     Environment = var.deploy_env
     Project     = var.service_name
   }
-}
-
-################################################################################
-# Supporting Resources
-################################################################################
-
-data "aws_ssm_parameter" "fluentbit" {
-  name = "/aws/service/aws-for-fluent-bit/stable"
-}
-
-resource "aws_service_discovery_http_namespace" "this" {
-  name        = local.name
-  description = "CloudMap namespace for ${local.name}"
 }
 
 
