@@ -139,7 +139,7 @@ module "alb" {
       }
     } */
     ex-https = {
-      port            = var.service_port
+      port            = 443
       protocol        = "HTTPS"
       certificate_arn = data.aws_ssm_parameter.cert.value
 
@@ -151,7 +151,7 @@ module "alb" {
 
   target_groups = {
     ex-instance = {
-      name_prefix = "h1"
+      name_prefix = var.service_name
       protocol    = "HTTP"
       port        = var.service_port
       target_type = "ip"
