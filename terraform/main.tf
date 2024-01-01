@@ -252,9 +252,10 @@ module "ecs" {
       }
 
       service_connect_configuration = {
+        namespace = "example"
         service = {
           client_alias = {
-            port     = var.service_port
+            port     = 80
             dns_name = var.service_name
           }
           port_name      = var.service_name
@@ -266,7 +267,7 @@ module "ecs" {
         service = {
           target_group_arn = module.alb.target_groups["ex-instance"].arn
           container_name   = var.service_name
-          container_port   = var.service_port
+          container_port   = 80
         }
       }
 
