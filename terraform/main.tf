@@ -129,7 +129,7 @@ module "alb" {
   }
 
   listeners = {
-    ex-http-https-redirect = {
+/*     ex-http-https-redirect = {
       port     = "80"
       protocol = "HTTP"
       redirect = {
@@ -137,7 +137,7 @@ module "alb" {
         protocol    = "HTTPS"
         status_code = "HTTP_301"
       }
-    }
+    } */
     ex-https = {
       port            = var.service_port
       protocol        = "HTTPS"
