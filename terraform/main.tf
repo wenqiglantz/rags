@@ -221,7 +221,7 @@ module "ecs" {
           cpu       = 512
           memory    = 1024
           essential = true
-          image     = "906394416424.dkr.ecr.us-west-2.amazonaws.com/aws-for-fluent-bit:stable"
+          image     = "amazon/aws-for-fluent-bit:latest"
           firelens_configuration = {
             type = "fluentbit"
           }
@@ -341,26 +341,6 @@ module "ecr" {
   repository_force_delete = true
 
 }
-
-/* data "aws_iam_policy_document" "registry" {
-  statement {
-    principals {
-      type        = "AWS"
-      identifiers = [
-        module.ecs.services["rags"].task_exec_iam_role_arn, 
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/github-actions-role"
-      ]
-    }
-
-    actions = [
-      "ecr:*",
-    ]
-
-    resources = [
-      module.ecr.repository_arn,
-    ]
-  }
-} */
 
 #######################################
 # GitHub env variable creation, need these variables for app CI/CD in github actions
