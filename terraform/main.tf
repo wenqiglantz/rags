@@ -264,7 +264,7 @@ module "ecs" {
       }
 
       service_connect_configuration = {
-        namespace = aws_service_discovery_http_namespace.http_namespace.arn
+        namespace = aws_service_discovery_http_namespace.this.arn
         service = {
           client_alias = {
             port     = 80
