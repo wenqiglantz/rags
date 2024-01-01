@@ -169,6 +169,20 @@ module "alb" {
   }
 }
 
+################################################################################
+# Supporting Resources
+################################################################################
+
+data "aws_ssm_parameter" "fluentbit" {
+  name = "/aws/service/aws-for-fluent-bit/stable"
+}
+
+resource "aws_service_discovery_http_namespace" "this" {
+  name        = local.name
+  description = "CloudMap namespace for ${local.name}"
+}
+
+
 module "ecs" {
   source  = "terraform-aws-modules/ecs/aws"
   version = "5.7.4"
@@ -252,7 +266,7 @@ module "ecs" {
       }
 
       service_connect_configuration = {
-        # namespace = "example"
+        namespace = aws_service_discovery_http_namespace.http_namespace.arn
         service = {
           client_alias = {
             port     = 80
