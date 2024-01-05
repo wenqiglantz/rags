@@ -1,11 +1,10 @@
 variable "deploy_repo" {
-  description = "CI injected variable, application's repo name"
+  description = "application's repo name"
   type        = string
-  default     = "sharedactions"
 }
 
 variable "deploy_env" {
-  description = "CI injected variable, deployment environment"
+  description = "deployment environment"
   type        = string
   default     = "dev"
 }

@@ -37,10 +37,6 @@ data "aws_ssm_parameter" "cert" {
   name = "/base/certificateArn"
 }
 
-data "aws_ssm_parameter" "fluentbit" {
-  name = "/aws/service/aws-for-fluent-bit/stable"
-}
-
 data "aws_caller_identity" "current" {}
 data "aws_availability_zones" "available" {}
 
@@ -131,15 +127,6 @@ module "alb" {
   }
 
   listeners = {
-    /*     ex-http-https-redirect = {
-      port     = "80"
-      protocol = "HTTP"
-      redirect = {
-        port        = "443"
-        protocol    = "HTTPS"
-        status_code = "HTTP_301"
-      }
-    } */
     ex-https = {
       port            = 443
       protocol        = "HTTPS"
@@ -224,7 +211,6 @@ module "ecs" {
           memory    = 1024
           essential = true
           image = "amazon/aws-for-fluent-bit:latest"
-          #image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/${var.ecr_repository_name}:aws-for-fluent-bit"
           firelens_configuration = {
             type = "fluentbit"
           }
@@ -381,49 +367,3 @@ resource "github_actions_environment_variable" "ecr_repository_name" {
   variable_name = "ECR_REPOSITORY_NAME"
   value         = var.ecr_repository_name
 }
-
-
-# module "cluster_alb" {
-#   source = "github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/ecs/cluster_alb?ref=main"
-
-#   deploy_env     = var.deploy_env
-#   requester_name = var.requester_name
-
-#   create_cluster            = var.create_cluster
-#   cluster_name              = var.cluster_name
-#   alb_name                  = "${var.service_prefix}-alb"
-#   service_port_target_group = var.service_port_target_group
-#   context_path              = var.context_path
-#   alb_https_certificate_arn = data.aws_ssm_parameter.cert.value
-
-#   deploy_repo       = var.deploy_repo
-#   pipeline_token    = var.pipeline_token
-#   github_repo_owner = var.github_repo_owner
-# }
-
-# module "fargate" {
-#   source = "github.com/wenqiglantz/reusable-workflows-modules//terraform/modules/ecs/service_taskdef?ref=main"
-
-#   deploy_env     = var.deploy_env
-#   requester_name = var.requester_name
-
-#   create_cluster                      = var.create_cluster
-#   cluster_name                        = var.cluster_name
-#   alb_security_group_id               = module.cluster_alb.alb_security_group_id
-#   alb_target_group_arn                = module.cluster_alb.ecs_alb_target_group_arn
-#   cpu                                 = var.cpu
-#   memory                              = var.memory
-#   service_name                        = var.service_name
-#   ecr_repository_name                 = var.ecr_repository_name
-#   service_port_target_group           = var.service_port_target_group
-#   log_group_retention_in_days         = var.log_group_retention_in_days
-#   healthcheck_path                    = var.healthcheck_path
-#   target_group_name                   = "${var.service_prefix}-tgt-group"
-#   alb_request_count_per_target        = var.alb_request_count_per_target
-#   ecs_autoscaling_target_max_capacity = var.ecs_autoscaling_target_max_capacity
-#   ecs_autoscaling_target_min_capacity = var.ecs_autoscaling_target_min_capacity
-
-#   deploy_repo       = var.deploy_repo
-#   pipeline_token    = var.pipeline_token
-#   github_repo_owner = var.github_repo_owner
-# }
