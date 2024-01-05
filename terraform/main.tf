@@ -45,7 +45,7 @@ data "aws_caller_identity" "current" {}
 data "aws_availability_zones" "available" {}
 
 locals {
-  name   = "ex-${basename(path.cwd)}"
+  name = "ex-${basename(path.cwd)}"
 
   vpc_cidr = var.vpc_cidr
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
@@ -131,7 +131,7 @@ module "alb" {
   }
 
   listeners = {
-/*     ex-http-https-redirect = {
+    /*     ex-http-https-redirect = {
       port     = "80"
       protocol = "HTTP"
       redirect = {
@@ -288,11 +288,12 @@ module "ecs" {
       subnet_ids = module.vpc.private_subnets
       security_group_rules = {
         alb_ingress_3000 = {
-          type        = "ingress"
-          from_port   = var.service_port
-          to_port     = var.service_port
-          protocol    = "tcp"
-          description = "Service port"
+          type                     = "ingress"
+          from_port                = var.service_port
+          to_port                  = var.service_port
+          protocol                 = "tcp"
+          description              = "Service port"
+          source_security_group_id = module.alb.security_group_id
         }
         egress_all = {
           type        = "egress"
@@ -317,7 +318,7 @@ module "ecr" {
   repository_name = "rags"
 
   repository_read_write_access_arns = [
-    module.ecs.services["rags"].task_exec_iam_role_arn, 
+    module.ecs.services["rags"].task_exec_iam_role_arn,
     "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/github-actions-role"
   ]
   repository_lifecycle_policy = jsonencode({
