@@ -1,6 +1,7 @@
 aws_region     = "us-east-1"
 requester_name = "Wenqi Glantz"
 
+vpc_name            = "rags"
 vpc_cidr            = "172.30.0.0/16"
 cluster_name        = "rags"
 task_cpu            = 2048
