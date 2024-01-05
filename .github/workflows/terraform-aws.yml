@@ -1,4 +1,4 @@
-name: "Terraform ECS provisioning"
+name: "Terraform AWS provisioning"
 
 on:
   workflow_dispatch:
