@@ -286,7 +286,7 @@ module "ecs" {
       }
 
       subnet_ids = module.vpc.private_subnets
-      security_group_ingress_rules = {
+      security_group_rules = {
         alb_ingress_3000 = {
           type        = "ingress"
           from_port   = var.service_port
@@ -294,8 +294,6 @@ module "ecs" {
           protocol    = "tcp"
           description = "Service port"
         }
-      }
-      security_group_egress_rules = {
         egress_all = {
           type        = "egress"
           from_port   = 0
